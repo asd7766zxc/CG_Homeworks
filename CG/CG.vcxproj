@@ -24,11 +24,16 @@
     <ClCompile Include="Box.hpp" />
     <ClCompile Include="DrawObject.hpp" />
     <ClCompile Include="Particle.hpp" />
+    <ClCompile Include="Image.hpp" />
+    <ClCompile Include="RoundedLine.hpp" />
     <ClCompile Include="UIElement.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorWheel.hpp" />
+    <ClInclude Include="Dot.hpp" />
     <ClInclude Include="DrawingUtility.hpp" />
+    <ClInclude Include="Line.hpp" />
+    <ClInclude Include="SmoothCurve.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

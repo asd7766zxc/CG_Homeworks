@@ -33,12 +33,27 @@
     <ClCompile Include="DrawObject.hpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Image.hpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="RoundedLine.hpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawingUtility.hpp">
       <Filter>來源檔案</Filter>
     </ClInclude>
     <ClInclude Include="ColorWheel.hpp">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Dot.hpp">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Line.hpp">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="SmoothCurve.hpp">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

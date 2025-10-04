@@ -15,12 +15,17 @@ public:
 
 	void Update(int elapsed) override {
 		auto data = motion(elapsed,this);
+		
 		glPointSize(data.size);
-		auto [r, g, b, a] = data.color;
-		glColor3f(r,g,b);
+		glColor3f(TC(Color(0,0,0)));
 		glBegin(GL_POINTS);     /*  Draw a point */
-		auto [x, y] = data.pt;
-		glVertex3f(x + world_x, y + world_y, 0);
+		glVertex3f(toView(data.pt), 0);
+		glEnd();
+
+		glPointSize(data.size);
+		glColor3f(TC(data.color));
+		glBegin(GL_POINTS);     /*  Draw a point */
+		glVertex3f(toView(data.pt), 0);
 		glEnd();
 	}
 };

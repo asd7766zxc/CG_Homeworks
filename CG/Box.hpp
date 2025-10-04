@@ -11,7 +11,5 @@ public:
 	
 	void Draw(int x,int y) override {
 		x += world_x, y += world_y;
-
-
 	}
 };

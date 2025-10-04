@@ -2,6 +2,10 @@
 #include <math.h>
 #include<numbers>
 #include <vector>
+#define TP(X) (X).x,(X).y
+#define T4C(X) (X).r,(X).g,(X).b,(X).a
+#define TC(X) (X).r,(X).g,(X).b
+#define toView(P) TP(transform_to_viewport(P))
 
 template<class T>
 struct _Point2d {
@@ -16,7 +20,8 @@ struct _Point2d {
 	T  operator * (_Point2d a) { return x * a.x + y * a.y; }
 	T  operator ^ (_Point2d a) { return x * a.y - y * a.x; }
 
-	auto operator<=>(_Point2d o) const { return (x != o.x) ? x <=> o.x : y <=> o.y; }
+	bool operator < (_Point2d a) const { return x < a.x || (x == a.x && y < a.y); };
+	bool operator== (_Point2d a) const { return x == a.x and y == a.y; };
 
 	friend T ori(_Point2d a, _Point2d b, _Point2d c) { return (b - a) ^ (c - a); }
 	friend T abs2(_Point2d a) { return a * a; }
@@ -37,6 +42,10 @@ struct Color {
 	Color(float _r, float _g, float _b, float _a = 1.0) :r(_r), g(_g), b(_b), a(_a){}
 	Color() :r(0.0), g(0.0), b(0.0), a(1.0) {}
 	Color operator * (float  c) { return Color(r*c,g*c,b*c,a*c); }
+	Color operator + (Color rst) { return Color(r + rst.r, g + rst.g, b + rst.b, a + rst.a); }
+	friend Color blend(Color A, Color B, float p) {
+		return A * p + B * (1.0 - p);
+	}
 };
 
 
@@ -62,13 +71,16 @@ bool point_within(_Point2d<T> L,_Point2d<T> R, _Point2d<T> l,_Point2d<T> r) {
 	return (x0 <= x2 && y0 <= y2 && x3 <= x1 && y3 <= y1);
 }
 template<class T>
-extern Point2i transform_to_viewport(_Point2d<T> point);
+extern Point2d transform_to_viewport(_Point2d<T> point);
 extern Point2d viewport_to_world(Point2i point);
 extern Point2d polar_to_cartesian(Point2d point);
+extern Point2d radvec(float rad);
+extern Point2d rotate(Point2d point, float rad);
 
 extern Color hsv_to_rgb(int h, float s, float v);
+extern std::vector<Point2d> convex_hull(std::vector<Point2d> P);
 
-extern std::vector<Point2i> ords;
+extern std::vector<Point2d> ords;
 
 extern float wcenx, wceny;
 extern int height, width;
@@ -78,3 +90,5 @@ extern int mdelta_x, mdelta_y;
 extern Color global_paint;
 extern float view_scale;
 extern Point2d projected_mouse;
+extern Point2d viewport_mouse;
+extern Point2d projected_omuse;
