@@ -19,13 +19,11 @@ public:
 	};
 	void OnMouseClick() override {
 		auto [mx, my] = projected_mouse;
-		printf("%f ,%f\n", mx, my);
 		if (abs2(projected_mouse - position) > radius * radius) return;
 		cursor_pos = Point2d(mx, my);
 		auto [r,theta] = polar_to_cartesian((cursor_pos - position));
 		float sat = r / radius;
 		int h = (theta / pi / 2.0f) * hue_sec;
-		printf("%f", theta);
 		int hue = h % hue_sec;
 		global_paint = hsv_to_rgb(hue, sat,1.0f);
 	}
