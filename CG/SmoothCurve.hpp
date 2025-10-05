@@ -27,6 +27,7 @@ public:
 		return sum;
 	}
 	//n ¦¸ ¨©¯÷¨ú½u work very well!!! :>>>>>>>
+	// but very at O(n^2) so need to break if n too large
 	Point2d bezier_curve(float t) {
 		int cn = n;
 		std::vector<Point2d> cur = sample;

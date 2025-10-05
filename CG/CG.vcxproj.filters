@@ -39,6 +39,9 @@
     <ClCompile Include="RoundedLine.hpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="BrushIndicator.hpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawingUtility.hpp">

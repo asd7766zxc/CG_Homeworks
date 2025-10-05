@@ -73,5 +73,18 @@ public:
 		glBegin(GL_LINES);
 		for (auto c : ords) glVertex2f(TP((c * 10 + cursor_pos)));
 		glEnd();
+
+		float radii = radius * 2.0f;
+		glColor3f(1.0f,1.0f,1.0f);
+		auto [px, py] = position;
+		px += radius;
+		py -= radius;
+		glRasterPos2d(TP(Point2d(px, py)));
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision(2);
+		ss << "rgb("<< r << "," << g  << "," << b << ")";
+		std::string display_text = ss.str();
+		for(auto c:display_text)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 	}
 };

@@ -16,7 +16,7 @@ public:
 		gluQuadricDrawStyle(circle, GLU_FILL);
 	}
 	void Update(int elapsed) override {
-		glColor3f(TC(color));
+		glColor4f(T4C(color));
 		glPushMatrix();
 		glTranslatef(toView(pos), 0.0f);
 		gluDisk(circle, inner_radius, size, sec, 3);

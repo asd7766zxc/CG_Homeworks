@@ -92,3 +92,4 @@ extern float view_scale;
 extern Point2d projected_mouse;
 extern Point2d viewport_mouse;
 extern Point2d projected_omuse;
+extern float brush_size;

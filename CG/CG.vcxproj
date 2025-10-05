@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\..\Downloads\Introdution範例程式%28CMake專案%29\CG1101_SampleCode\draw.cpp" />
     <ClCompile Include="Animated.hpp" />
     <ClCompile Include="Box.hpp" />
+    <ClCompile Include="BrushIndicator.hpp" />
     <ClCompile Include="DrawObject.hpp" />
     <ClCompile Include="Particle.hpp" />
     <ClCompile Include="Image.hpp" />

@@ -1,3 +1,4 @@
+#pragma once
 #include "Animated.hpp"
 
 //Drawing UI in real time
