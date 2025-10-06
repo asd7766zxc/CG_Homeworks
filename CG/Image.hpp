@@ -24,11 +24,12 @@ public:
 	bool first_draw = false;
 	int size = 0;
 	const char* name;
+	bool first_read = true;
+	int pos[2];
 	Image(int w, int h,const char * _name) 
 		: _width(w), _height(h), name(_name) {
 		memset(buff, 0, sizeof(buff));
 		memset(offseted_buff, 0, sizeof(offseted_buff));
-		read_from_file();
 		size = w * h * 4;
 	}
 	void initial(Color color) {
@@ -36,6 +37,11 @@ public:
 	}
 
 	void ReadPixelToBuffer() {
+		if (first_read) {
+			read_from_file();
+			first_read = false;
+			return;
+		}
 		auto [x, y] = Point2i(TP(transform_to_viewport(position)));
 		int w = _width, h = _height;
 
@@ -77,14 +83,30 @@ public:
 	}
 	void save_file() {
 		FILE* file = fopen(name, "w");
-		fwrite(buff, sizeof(BYTE), sizeof(buff), file);
+		std::string str = name;
+		str += "pos";
+		FILE* file_pos = fopen(str.c_str(), "w");
+		fwrite(buff, sizeof(BYTE), size, file);
 		fclose(file);
+		pos[0] = position.x;
+		pos[1] = position.y;
+		fwrite(pos, sizeof(int), 2, file_pos);
+		fclose(file_pos);
 	}
 	void read_from_file() {
 		FILE* file = fopen(name, "r");
+		std::string str = name;
+		str += "pos";
+		FILE* file_pos = fopen(str.c_str(), "r");
 		if (file) {
-			fread(buff, sizeof(BYTE), sizeof(buff), file);
+			fread(buff, sizeof(BYTE), size, file);
 			fclose(file);
+		}
+		if (file_pos) {
+			fread(pos, sizeof(int), 2, file_pos);
+			fclose(file_pos);
+			position.x = pos[0];
+			position.y = pos[1];
 		}
 	}
 	void DrawIndicator() {
@@ -105,21 +127,16 @@ public:
 		glDisable(GL_BLEND);
 		glFlush();
 	}
-	void* new2d(int h, int w, int size)
-	{
-		int i;
+	void* new_2d_array(int h, int w, int size){
 		void** p;
-
 		p = (void**)new char[h * sizeof(void*) + h * w * size];
-		for (i = 0; i < h; i++)
-			p[i] = ((char*)(p + h)) + i * w * size;
-
+		for (int i = 0; i < h; i++) p[i] = ((char*)(p + h)) + i * w * size;
 		return p;
 	}
-	#define NEW2D(H, W, TYPE) (TYPE **)new2d(H, W, sizeof(TYPE))
-	int H = _width * _height;
+	#define NEW2DARR(H, W, TYPE) (TYPE **)new_2d_array(H, W, sizeof(TYPE))
 	void backup() {
-		BYTE** tmp = NEW2D(H, 4, BYTE);
+		int H = _width * _height;
+		BYTE** tmp = NEW2DARR(H, 4, BYTE);
 		for (int i = 0; i < H; ++i) {
 			for(int g = 0; g < 4;++g)
 			tmp[i][g] = buff[i][g];
@@ -138,6 +155,8 @@ public:
 			}
 		}
 	}
+
+	//WIP
 	void next() {
 		current_indx = std::min({ drawing_trace.size() - 1, (size_t)current_indx + 1 });
 

@@ -9,7 +9,7 @@ public:
 	std::vector<Color> colors;
 	int n = 0;
 	float width = 1.0f;
-	SmoothCurve(std::vector<Point2d>& _samples,float wd = 10.0f, int _sample_count = 1000, std::vector<Color> _colors = {})
+	SmoothCurve(std::vector<Point2d>& _samples,float wd = 10.0f, std::vector<Color> _colors = {},int _sample_count = 1000)
 		: sample(_samples),sample_count(_sample_count),width(wd), colors(_colors) {
 		n = _samples.size();
 	}
@@ -54,7 +54,7 @@ public:
 			// 平均相鄰點顏色
 			Color cur = global_paint;
 			if (colors.size()) {
-				auto cur = colors[color_index];
+				cur = colors[color_index];
 				if (color_index + 1 < n) {
 					float par = partial * n - color_index;
 					cur = blend(cur, colors[color_index + 1],par);
