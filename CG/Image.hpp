@@ -23,10 +23,10 @@ public:
 	bool dragging = false;
 	bool first_draw = false;
 	int size = 0;
-	const char* name;
+	std::string name;
 	bool first_read = true;
 	int pos[2];
-	Image(int w, int h,const char * _name) 
+	Image(int w, int h,std::string _name) 
 		: _width(w), _height(h), name(_name) {
 		memset(buff, 0, sizeof(buff));
 		memset(offseted_buff, 0, sizeof(offseted_buff));
@@ -82,7 +82,7 @@ public:
 
 	}
 	void save_file() {
-		FILE* file = fopen(name, "w");
+		FILE* file = fopen(name.c_str(), "w");
 		std::string str = name;
 		str += "pos";
 		FILE* file_pos = fopen(str.c_str(), "w");
@@ -94,7 +94,7 @@ public:
 		fclose(file_pos);
 	}
 	void read_from_file() {
-		FILE* file = fopen(name, "r");
+		FILE* file = fopen(name.c_str(), "r");
 		std::string str = name;
 		str += "pos";
 		FILE* file_pos = fopen(str.c_str(), "r");
