@@ -70,26 +70,38 @@ bool point_within(_Point2d<T> L,_Point2d<T> R, _Point2d<T> l,_Point2d<T> r) {
 
 	return (x0 <= x2 && y0 <= y2 && x3 <= x1 && y3 <= y1);
 }
+
+extern Color hsv_to_rgb(int h, float s, float v);
+
+//view transforms
 template<class T>
 extern Point2d transform_to_viewport(_Point2d<T> point);
 extern Point2d viewport_to_world(Point2i point);
-extern Point2d polar_to_cartesian(Point2d point);
+
+//Geometry
 extern Point2d radvec(float rad);
 extern Point2d rotate(Point2d point, float rad);
-
-extern Color hsv_to_rgb(int h, float s, float v);
+extern Point2d polar_to_cartesian(Point2d point);
 extern std::vector<Point2d> convex_hull(std::vector<Point2d> P);
+extern Point2d minimum_enclosing_circle(std::vector<Point2d>& points);
 
 extern std::vector<Point2d> ords;
 
 extern float wcenx, wceny;
 extern int height, width;
 extern int mouse_x, mouse_y;
-extern float world_x, world_y;
+extern int omouse_x, omouse_y;
 extern int mdelta_x, mdelta_y;
+extern float world_x, world_y;
 extern Color global_paint;
 extern float view_scale;
 extern Point2d projected_mouse;
 extern Point2d viewport_mouse;
 extern Point2d projected_omuse;
 extern float brush_size;
+extern Point2d typing_cursor;
+extern int sgn(float x);
+extern bool erasering;
+extern bool typing;
+extern bool pen_tool;
+extern int current_canva;

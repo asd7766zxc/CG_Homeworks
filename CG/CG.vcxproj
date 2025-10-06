@@ -24,6 +24,9 @@
     <ClCompile Include="Box.hpp" />
     <ClCompile Include="BrushIndicator.hpp" />
     <ClCompile Include="DrawObject.hpp" />
+    <ClCompile Include="DrawUtilityImp.cpp" />
+    <ClCompile Include="GlobalVariables.hpp" />
+    <ClCompile Include="Grid.hpp" />
     <ClCompile Include="Particle.hpp" />
     <ClCompile Include="Image.hpp" />
     <ClCompile Include="RoundedLine.hpp" />
@@ -33,8 +36,11 @@
     <ClInclude Include="ColorWheel.hpp" />
     <ClInclude Include="Dot.hpp" />
     <ClInclude Include="DrawingUtility.hpp" />
+    <ClInclude Include="FlyingText.hpp" />
     <ClInclude Include="Line.hpp" />
+    <ClInclude Include="SimplePolygon.hpp" />
     <ClInclude Include="SmoothCurve.hpp" />
+    <ClInclude Include="Text.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -126,7 +132,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>

@@ -10,6 +10,6 @@ public:
 	virtual void OnMouseUp(int btn) {};
 	virtual void OnMouseMove(bool down) {};
 	virtual void OnMouseEnter() {};
-	virtual void OnMouseClick() {};
+	virtual bool OnMouseClick() { return false; };
 	virtual void OnKeyboard() {};
 };

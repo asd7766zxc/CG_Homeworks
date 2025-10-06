@@ -1,5 +1,6 @@
 #pragma once
 #include "UIElement.hpp"
+#include "Text.hpp"
 #include <GL/freeglut.h>
 
 
@@ -12,11 +13,14 @@ public:
 	int hue_sec = 360;
 	float value = 1.0f;
 	float radius = 100.0f;
+	int spin_time = 500;
 	bool enable_color_animation = false;
+	clock_t last;
 
 	ColorWheel(int _x, int _y) : position(_x, _y) {
 		cursor_pos = position;
 		global_paint = Color{ 1,1,1,1 };
+		last = clock();
 	};
 	void PickColor(Point2d color) {
 		auto [r, theta] = color;
@@ -26,15 +30,16 @@ public:
 		int hue = h % hue_sec;
 		global_paint = hsv_to_rgb(hue, sat, 1.0f);
 	}
-	void OnMouseClick() override {
+	bool OnMouseClick() override {
 		auto [mx, my] = viewport_mouse;
-		if (abs2(viewport_mouse - position) > radius * radius) return;
+		if (abs2(viewport_mouse - position) > radius * radius) return false;
 		cursor_pos = Point2d(mx, my);
 		auto [r,theta] = polar_to_cartesian((cursor_pos - position));
 		float sat = r / radius;
 		int h = (theta / pi / 2.0f) * hue_sec;
 		int hue = h % hue_sec;
 		global_paint = hsv_to_rgb(hue, sat,1.0f);
+		return true;
 	}
 	void Update(int elapsed) override {
 
@@ -61,8 +66,8 @@ public:
 
 		//animated color selection
 		if (enable_color_animation) {
-			int elap = elapsed % 501;
-			float rad = (elap / 500.0) * 2 * pi;
+			int elap = elapsed % (spin_time + 1);
+			float rad = (elap / (float)spin_time) * 2 * pi;
 			PickColor({ 0.5f,rad });
 		}
 
@@ -75,16 +80,29 @@ public:
 		glEnd();
 
 		float radii = radius * 2.0f;
-		glColor3f(1.0f,1.0f,1.0f);
 		auto [px, py] = position;
 		px += radius;
 		py -= radius;
-		glRasterPos2d(TP(Point2d(px, py)));
 		std::stringstream ss;
 		ss << std::fixed << std::setprecision(2);
 		ss << "rgb("<< r << "," << g  << "," << b << ")";
-		std::string display_text = ss.str();
-		for(auto c:display_text)
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+		Text* txt_color = new Text(Point2d(px, py), ss.str(), false, GLUT_BITMAP_HELVETICA_18, Color{ 1,1,1,0.5 }, false);
+		txt_color->Update(0);
+		clock_t now = clock();
+		std::stringstream s1;
+		s1 << std::fixed << std::setprecision(2);
+		s1 << 1.0 / ((double)(now - last) / CLOCKS_PER_SEC) << " fps";
+		last = now;
+		Text* txt_fps = new Text(Point2d(px, py + 18), s1.str(), false, GLUT_BITMAP_HELVETICA_18, Color{ 1,1,1,0.5 }, false);
+		txt_fps->Update(0);
+
+		std::stringstream s2;
+		if (erasering) s2 << "erasering";
+		if (erasering && typing) s2 << " ";
+		if (typing) s2 << "typing";
+		if (pen_tool) s2 << " " << "Pen Tool";
+		Text* txt_state = new Text(Point2d(px, py + 36), s2.str(), false, GLUT_BITMAP_HELVETICA_18, Color{ 1,1,1,0.5 }, false);
+		txt_state->Update(0);
 	}
 };
