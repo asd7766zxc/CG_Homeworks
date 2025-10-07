@@ -31,6 +31,7 @@
     <ClCompile Include="Particle.hpp" />
     <ClCompile Include="Image.hpp" />
     <ClCompile Include="RoundedLine.hpp" />
+    <ClCompile Include="SmoothPolygon.hpp" />
     <ClCompile Include="UIElement.hpp" />
   </ItemGroup>
   <ItemGroup>

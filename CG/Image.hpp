@@ -56,7 +56,8 @@ public:
 		w = std::max(0, std::min(w + x, w));
 		if (x < 0) x = 0;
 		if (y < 0) y = 0;
-
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glReadPixels(x,y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, offseted_buff);
 		for(int i =  _height - h; i < _height;++i)
 			for (int j = _width - w; j <  _width; ++j){
@@ -64,7 +65,11 @@ public:
 				int indics = (i - (_height - h)) * w + (j - (_width - w));
 				for (int g = 0; g < 4; ++g) buff[index][g] = offseted_buff[indics][g];
 				if (buff[index][0] == 0 && buff[index][1] == 0 && buff[index][2] == 0) buff[index][3] = 0;
+				else {
+					buff[index][3] = 255;
+				}
 			}
+		glDisable(GL_BLEND);
 	}
 	void LoadPixelFromBuffer() {
 		auto [x, y] = Point2i(TP(transform_to_viewport(position)));
@@ -78,7 +83,16 @@ public:
 			for (int j = _width - w; j < _width; ++j) {
 				int index = i * _width + j;
 				int indics = (i - (_height - h)) * w + (j - (_width - w));
-				for (int g = 0; g < 4; ++g) offseted_buff[indics][g] = buff[index][g];
+				BYTE mx = 0;
+				for (int g = 0; g < 3; ++g) mx = std::max(mx, buff[index][g]);
+				float opacity_scale = 0;
+				if (mx) {
+					opacity_scale = (255.0 / mx);
+				}
+				for (int g = 0; g < 4; ++g) {
+					offseted_buff[indics][g] = (BYTE)(opacity_scale * buff[index][g]);
+				}
+				offseted_buff[indics][3] = mx;
 			}
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -193,7 +207,18 @@ public:
 			for (int j = _w - w; j < _w; ++j) {
 				int index = i * _w + j;
 				int indics = (i - (_h - h)) * w + (j - (_w - w));
-				for (int g = 0; g < 4; ++g) offseted_buff[indics][g] = rotated_buff[index][g];
+
+
+				BYTE mx = 0;
+				for (int g = 0; g < 3; ++g) mx = std::max(mx, rotated_buff[index][g]);
+				float opacity_scale = 0;
+				if (mx) {
+					opacity_scale = (255.0 / mx);
+				}
+				for (int g = 0; g < 4; ++g) {
+					offseted_buff[indics][g] = (BYTE)(opacity_scale * rotated_buff[index][g]);
+				}
+				offseted_buff[indics][3] = mx;
 				offseted_buff[indics][3] = (BYTE)(global_opacity * offseted_buff[indics][3]);
 			}
 		glEnable(GL_BLEND);

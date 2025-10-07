@@ -54,6 +54,9 @@
     <ClCompile Include="draw.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="SmoothPolygon.hpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawingUtility.hpp">

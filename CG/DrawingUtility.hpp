@@ -108,3 +108,4 @@ extern int current_canva;
 extern int canva_brush;
 extern float global_opacity;
 extern bool rotating_canva;
+extern int polygon_mode;

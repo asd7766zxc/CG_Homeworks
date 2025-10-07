@@ -27,6 +27,7 @@
 #include "Grid.hpp"
 #include "SimplePolygon.hpp"
 #include "MouseIndicator.hpp"
+#include "SmoothPolygon.hpp"
 
 ColorWheel* color_wheel;
 BrushIndicator* brush_indicator = nullptr;
@@ -387,6 +388,12 @@ void setup_canva_scale_animation() {
     Canvas[canva_brush]->showing_scale = true;
     Canvas[canva_brush]->markdead = false;
 }
+
+#define SMOOTH_FILL 1
+#define NO_FILL 2
+#define SMOOTH 3
+#define FILL 4
+int polygon_mode = 4;
 void mouse_func(int button, int state, int x, int y){
     update_mouse_position(x, y);
     if (current_canva >= 0) Canvas[current_canva]->dragging = false;
@@ -413,6 +420,7 @@ void mouse_func(int button, int state, int x, int y){
     if (button == 3) {
         if (adjusting_opacity) {
             global_opacity = std::max(global_opacity - 0.02f, 0.0f);
+            global_paint.a = global_opacity;
             add_mouse_indicator();
             mouse_indicator->text = "alpha : ";
             mouse_indicator->now_indicate = global_opacity;
@@ -436,6 +444,7 @@ void mouse_func(int button, int state, int x, int y){
     if (button == 4) {
         if (adjusting_opacity) {
             global_opacity = std::min(global_opacity + 0.02f, 1.0f);
+            global_paint.a = global_opacity;
             add_mouse_indicator();
             mouse_indicator->text = "alpha : ";
             mouse_indicator->now_indicate = global_opacity;
@@ -487,14 +496,36 @@ void mouse_func(int button, int state, int x, int y){
             if ((abs(poly_mouse.x - poly_omouse.x) +    \
                 abs(poly_mouse.y - poly_omouse.y) <= 2) \
                 && !first_pen) {
-                if (polygon_fill) {
-                    SimplePolygon * polygon = new SimplePolygon(polygon_cache,polygon_color);
+                switch (polygon_mode) {
+                case FILL: {
+                    SimplePolygon* polygon = new SimplePolygon(polygon_cache, polygon_color);
                     drawing_queue.push(polygon);
+                    break;
                 }
-                else {
+                case SMOOTH: {
+                    std::vector<Point2d> tmp;
+                    for (auto c : polygon_cache) tmp.push_back(Point2d(TP(c)));
+                    tmp.push_back(tmp.front());
+                    polygon_color.push_back(polygon_color.front());
+                    SmoothPolygon* polygon = new SmoothPolygon(tmp,brush_size, polygon_color,false);
+                    drawing_queue.push(polygon);
+                    break;
+                }
+                case SMOOTH_FILL: {
+                    std::vector<Point2d> tmp;
+                    for (auto c : polygon_cache) tmp.push_back(Point2d(TP(c)));
+                    tmp.push_back(tmp.front());
+                    polygon_color.push_back(polygon_color.front());
+                    SmoothPolygon* polygon = new SmoothPolygon(tmp, brush_size, polygon_color, true);
+                    drawing_queue.push(polygon);
+                    break;
+                }
+                case NO_FILL: {
                     auto line = new RoundedLine(projected_mouse, Point2d(TP(polygon_cache[0])), brush_size, polygon_color.back(), global_paint);
                     drawing_cache.push_back(line);
                     for (auto c : drawing_cache) drawing_queue.push(c);
+                    break;
+                }
                 }
                 drawing_cache.clear();  
                 polygon_cache.clear();
@@ -715,6 +746,10 @@ void read_canvas() {
         ++i;
     }
 }
+int fill_m;
+void change_fill_mode(int value) {
+    polygon_mode = value;
+}
 /*---------------------------------------------------------------
  * Main procedure sets up the window environment.
  */
@@ -727,7 +762,6 @@ int main(int argc, char** argv){
     glutInitWindowSize(width, height); /*--Define window's height and width--*/
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); /*---set display mode---*/
     init_func();
-
     /* Create parent window */
     glutCreateWindow("Lament, Counter-clock we rose");
     glClear(GL_COLOR_BUFFER_BIT);
@@ -752,17 +786,23 @@ int main(int argc, char** argv){
     glutAddMenuEntry("GLUT_BITMAP_TIMES_ROMAN_24", (int)GLUT_BITMAP_TIMES_ROMAN_24);
 
     canva_m = glutCreateMenu(add_canva_menu);
-    glutAddMenuEntry("50x50",_50X50);
+    glutAddMenuEntry("50x50", _50X50);
     glutAddMenuEntry("100x100", _100X100);
     glutAddMenuEntry("500x500", _500X500);
     glutAddMenuEntry("1000x1000", _1000X1000);
+
+    fill_m = glutCreateMenu(change_fill_mode);
+    glutAddMenuEntry("None", NO_FILL);
+    glutAddMenuEntry("Smooth fill", SMOOTH_FILL);
+    glutAddMenuEntry("Fill", FILL);
+    glutAddMenuEntry("Smooth", SMOOTH);
 
     top_m = glutCreateMenu(top_menu);
     glutAddMenuEntry("Select", ACTION_SELECT_VALUE);
     glutAddMenuEntry("Typing", ACTION_TYPING_VALUE);
     glutAddMenuEntry("Eraser", ACTION_ERASER_VALUE);
     glutAddMenuEntry("Pen Tool", ACTION_PLPENS_VALUE);
-    glutAddMenuEntry("Fill Mode", ACTION_FILLMO_VALUE);
+    glutAddSubMenu("Fill Mode", fill_m);
     glutAddSubMenu("Add Canva", canva_m);
     glutAddSubMenu("Font", font_m);
     glutAttachMenu(GLUT_RIGHT_BUTTON);

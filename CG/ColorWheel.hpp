@@ -106,6 +106,27 @@ public:
 		if (pen_tool) s2 << " " << "[Pen Tool]";
 		if (canva_brush >= 0) s2 << " " << "[Drawing Canva" << canva_brush <<"]";
 		if (rotating_canva) s2 << " " << "[Rotating Canva]";
+		if (pen_tool) {
+				s2 << " [Fill Mode: ";
+			switch (polygon_mode) {
+			case 1: {
+				s2 << "Smooth Fill]";
+				break;
+			};
+			case 2: {
+				s2 << "No Fill]";
+				break;
+			};
+			case 3: {
+				s2 << "Smooth]";
+				break;
+			};
+			case 4: {
+				s2 << "Fill]";
+				break;
+			}
+			}
+		}
 		Text* txt_state = new Text(Point2d(px, py + 36), s2.str(), false, GLUT_BITMAP_HELVETICA_18, Color{ 1,1,1,0.5 }, false);
 		txt_state->Update(0);
 	}
