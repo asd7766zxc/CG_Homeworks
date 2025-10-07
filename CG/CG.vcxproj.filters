@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Downloads\Introdution範例程式%28CMake專案%29\CG1101_SampleCode\draw.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
     <ClCompile Include="Animated.hpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="MouseIndicator.hpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="draw.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
