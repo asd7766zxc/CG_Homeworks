@@ -29,6 +29,7 @@ public:
 		int h = (theta / pi / 2.0f) * hue_sec;
 		int hue = h % hue_sec;
 		global_paint = hsv_to_rgb(hue, sat, 1.0f);
+		global_paint.a = global_opacity;
 	}
 	bool OnMouseClick() override {
 		auto [mx, my] = viewport_mouse;
@@ -39,6 +40,7 @@ public:
 		int h = (theta / pi / 2.0f) * hue_sec;
 		int hue = h % hue_sec;
 		global_paint = hsv_to_rgb(hue, sat,1.0f);
+		global_paint.a = global_opacity;
 		return true;
 	}
 	void Update(int elapsed) override {
@@ -85,7 +87,7 @@ public:
 		py -= radius;
 		std::stringstream ss;
 		ss << std::fixed << std::setprecision(2);
-		ss << "rgb("<< r << "," << g  << "," << b << ")";
+		ss << "rgba("<< r << "," << g  << "," << b << "," << global_opacity << ")";
 
 		Text* txt_color = new Text(Point2d(px, py), ss.str(), false, GLUT_BITMAP_HELVETICA_18, Color{ 1,1,1,0.5 }, false);
 		txt_color->Update(0);
@@ -98,10 +100,12 @@ public:
 		txt_fps->Update(0);
 
 		std::stringstream s2;
-		if (erasering) s2 << "erasering";
+		if (erasering) s2 << "[Eraser]";
 		if (erasering && typing) s2 << " ";
-		if (typing) s2 << "typing";
-		if (pen_tool) s2 << " " << "Pen Tool";
+		if (typing) s2 << "[Typing]";
+		if (pen_tool) s2 << " " << "[Pen Tool]";
+		if (canva_brush >= 0) s2 << " " << "[Drawing Canva" << canva_brush <<"]";
+		if (rotating_canva) s2 << " " << "[Rotating Canva]";
 		Text* txt_state = new Text(Point2d(px, py + 36), s2.str(), false, GLUT_BITMAP_HELVETICA_18, Color{ 1,1,1,0.5 }, false);
 		txt_state->Update(0);
 	}

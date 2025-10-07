@@ -27,6 +27,7 @@
     <ClCompile Include="DrawUtilityImp.cpp" />
     <ClCompile Include="GlobalVariables.hpp" />
     <ClCompile Include="Grid.hpp" />
+    <ClCompile Include="MouseIndicator.hpp" />
     <ClCompile Include="Particle.hpp" />
     <ClCompile Include="Image.hpp" />
     <ClCompile Include="RoundedLine.hpp" />

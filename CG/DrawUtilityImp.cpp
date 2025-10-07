@@ -105,7 +105,3 @@ Color hsv_to_rgb(int h, float s, float v) {
 }
 
 int sgn(float x) { return (x > -eps) - (x < eps); } // dcmp == sgn
-bool erasering = false;
-bool typing = false;
-bool pen_tool = false;
-int current_canva = -1;

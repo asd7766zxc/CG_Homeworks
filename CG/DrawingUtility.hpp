@@ -105,3 +105,6 @@ extern bool erasering;
 extern bool typing;
 extern bool pen_tool;
 extern int current_canva;
+extern int canva_brush;
+extern float global_opacity;
+extern bool rotating_canva;

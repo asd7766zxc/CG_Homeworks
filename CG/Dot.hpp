@@ -16,10 +16,14 @@ public:
 		gluQuadricDrawStyle(circle, GLU_FILL);
 	}
 	void Update(int elapsed) override {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(T4C(color));
 		glPushMatrix();
 		glTranslatef(toView(pos), 0.0f);
 		gluDisk(circle, inner_radius, size, sec, 3);
 		glPopMatrix();
+		glEnd();
+		glDisable(GL_BLEND);
 	}
 };

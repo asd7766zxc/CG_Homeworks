@@ -51,6 +51,9 @@
     <ClCompile Include="Grid.hpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="MouseIndicator.hpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawingUtility.hpp">
