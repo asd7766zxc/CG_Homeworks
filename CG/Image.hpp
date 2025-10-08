@@ -12,6 +12,7 @@ class Image : public UIElement {
 public:
 	BYTE buff[MAX_WINDOW_WIDTH * MAX_WINDOW_HEIGHT][4];
 	BYTE offseted_buff[MAX_WINDOW_WIDTH * MAX_WINDOW_HEIGHT][4];
+	BYTE last_scence[MAX_WINDOW_WIDTH * MAX_WINDOW_HEIGHT][4];
 	std::vector<BYTE**>  drawing_trace;
 	int current_indx = -1;
 	// rgba
@@ -46,6 +47,7 @@ public:
 	void ReadPixelToBuffer() {
 		if (first_read) {
 			read_from_file();
+			backup();
 			first_read = false;
 			return;
 		}
@@ -369,8 +371,9 @@ public:
 		current_indx = std::max(current_indx-1, 0);
 		if (drawing_trace.size()) {
 			for (int i = 0; i < H; ++i) {
-				for (int g = 0; g < 4; ++g)
+				for (int g = 0; g < 4; ++g) {
 					buff[i][g] = drawing_trace[current_indx][i][g];
+				}
 			}
 		}
 	}
@@ -378,8 +381,13 @@ public:
 	//WIP
 	void next() {
 		current_indx = std::min({ drawing_trace.size() - 1, (size_t)current_indx + 1 });
-
-		//memcpy(buff, next_buff, size);
+		int H = _width * _height;
+		if (drawing_trace.size()) {
+			for (int i = 0; i < H; ++i) {
+				for (int g = 0; g < 4; ++g)
+					buff[i][g] = drawing_trace[current_indx][i][g];
+			}
+		}
 	}
 	bool mouse_inside() {
 		Point2d offseted_mouse = projected_mouse - position;

@@ -93,10 +93,11 @@ void calculate_canva() {
                 Canvas[canva_brush]->LoadPixelFromBuffer(pt);
             }
         }
-        if (mark_backup) canva->backup();
+        //if (mark_backup) canva->backup();
         if (!canva->first_draw) {
             canva->ReadPixelToBuffer();
         }
+        if (mark_backup) canva->backup();
         canva->first_draw = false;
         clear_screen();
     }
